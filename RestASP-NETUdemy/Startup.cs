@@ -8,12 +8,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RestASP_NETUdemy.Model.Context;
-using RestASP_NETUdemy.Services;
-using RestASP_NETUdemy.Services.Implementations;
+using RestASP_NETUdemy.Business;
+using RestASP_NETUdemy.Business.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RestASP_NETUdemy.Repository;
+using RestASP_NETUdemy.Repository.Implementations;
 
 namespace RestASP_NETUdemy
 {
@@ -44,7 +46,8 @@ namespace RestASP_NETUdemy
 
             //06-04-2022 Cícero Lopes
             //Injeção de Dependencia
-            services.AddScoped<IPessoaService, PessoaServiceImplementation>(); //Injeção de Dependencia
+            services.AddScoped<IPessoaBusiness, PessoaBusinessImplementation>(); 
+            services.AddScoped<IPessoaRepository, PessoaRepositoryImplementation>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,16 +6,16 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RestASP_NETUdemy.Services.Implementations
+namespace RestASP_NETUdemy.Repository.Implementations
 {
-    public class PessoaServiceImplementation : IPessoaService
+    public class PessoaRepositoryImplementation : IPessoaRepository
     {
         //Retirada essa variavel, servia para usar antes de ter banco de dados
         //private volatile int count; 
 
         private MySQLContext _context; //Declarar o Context para a classe
 
-        public PessoaServiceImplementation(MySQLContext context) //Criar um Construtor que não existia antes de precisar da conexão do banco de dados, com parametrosde DBContext
+        public PessoaRepositoryImplementation(MySQLContext context) //Criar um Construtor que não existia antes de precisar da conexão do banco de dados, com parametrosde DBContext
         {
             _context = context; //Atribiu ao Context da Classe o Context que veio como Paramtro
         }
@@ -97,7 +97,7 @@ namespace RestASP_NETUdemy.Services.Implementations
         //}
         
 
-        private bool Exists(long id)
+        public bool Exists(long id)
         {
             return _context.Pessoas.Any(p => p.Id.Equals(id));
 

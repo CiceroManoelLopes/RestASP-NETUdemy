@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RestASP_NETUdemy.Model;
-using RestASP_NETUdemy.Services;
+using RestASP_NETUdemy.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RestASP_NETUdemy.Repository;
 
 namespace RestASP_NETUdemy.Controllers
 {
@@ -15,25 +16,25 @@ namespace RestASP_NETUdemy.Controllers
     public class PersonController : ControllerBase
     {
         private readonly ILogger<PersonController> _logger;
-        private IPessoaService _pessoaService;  //Declarou o serviço
+        private IPessoaBusiness _pessoaBusiness;  //Declarou o serviço
 
-        public PersonController(ILogger<PersonController> logger, IPessoaService pessoaService) //Adicionou o serviço como parametro que vai receber
+        public PersonController(ILogger<PersonController> logger, IPessoaBusiness pessoaBusiness) //Adicionou o serviço como parametro que vai receber
         {
             _logger = logger;
-            _pessoaService = pessoaService; //Setou no serviço no controller com o que veio
+            _pessoaBusiness = pessoaBusiness; //Setou no serviço no controller com o que veio
         }
 
         [HttpGet]
         public IActionResult GetFindAll()
         {
-            return Ok(_pessoaService.FindAll());
+            return Ok(_pessoaBusiness.FindAll());
         }
 
         [HttpGet("{id}")] //Passar o id que será localizado como parametro na URL e não no Body
         //Os GETs podem ter o mesmo nome desde que para retirar ambiguidade colocar o Parametro "id" no  [HttpGet] com  [HttpGet("id")]
         public IActionResult GetFindId(long id)
         {
-            var pessoa = _pessoaService.FindByID(id);
+            var pessoa = _pessoaBusiness.FindByID(id);
             if(pessoa == null)
             {
                 return NotFound();
@@ -50,7 +51,7 @@ namespace RestASP_NETUdemy.Controllers
                 return BadRequest();
             }
             //return Ok();
-            return Ok(_pessoaService.Create(pessoa));
+            return Ok(_pessoaBusiness.Create(pessoa));
         }
 
         [HttpPut]
@@ -62,14 +63,14 @@ namespace RestASP_NETUdemy.Controllers
                 return BadRequest();
             }
             //return Ok();
-            return Ok(_pessoaService.Update(pessoa));
+            return Ok(_pessoaBusiness.Update(pessoa));
         }
 
         [HttpDelete("{id}")] //Passar o id que será deletado como parametro na URL e não no Body
         //Delete
         public IActionResult Delete(long id)
         {
-            _pessoaService.Delete(id);           
+            _pessoaBusiness.Delete(id);           
             return NoContent();
         }
     }
