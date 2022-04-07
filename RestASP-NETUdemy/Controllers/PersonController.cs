@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace RestASP_NETUdemy.Controllers
 {
+    [ApiVersion("1")]
     [ApiController]
-    [Route("api/[controller]")] //Adicionado o termo "api/" após alterar o Launch 
+    [Route("api/[controller]/v{version:apiVersion}")] //Adicionado o termo "api/" após alterar o Launch //Adiciona a versão da API
     public class PersonController : ControllerBase
     {
         private readonly ILogger<PersonController> _logger;

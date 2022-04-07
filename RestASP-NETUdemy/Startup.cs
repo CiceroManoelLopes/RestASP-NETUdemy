@@ -35,8 +35,15 @@ namespace RestASP_NETUdemy
 
             //Primeiro Parametro String conexao pegando do JSON de configuração
             //Segundo Paranetro solicitado pelo meu .NET serverVersion, coloquei null e validar
-            services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, ServerVersion.AutoDetect(connection))); 
+            services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 
+            //07-04-2022 Cicero Lopes
+            //Versionamento de API 
+            services.AddApiVersioning();
+
+
+            //06-04-2022 Cícero Lopes
+            //Injeção de Dependencia
             services.AddScoped<IPessoaService, PessoaServiceImplementation>(); //Injeção de Dependencia
         }
 
