@@ -65,7 +65,10 @@ namespace RestASP_NETUdemy
             //06-04-2022 Cícero Lopes
             //Injeção de Dependencia
             services.AddScoped<IPessoaBusiness, PessoaBusinessImplementation>(); 
-            services.AddScoped<IPessoaRepository, PessoaRepositoryImplementation>(); 
+            services.AddScoped<IPessoaRepository, PessoaRepositoryImplementation>();
+
+            services.AddScoped<IBooksBusiness, BooksBusinessImplementation>();
+            services.AddScoped<IBooksRepository, BooksRepositoryImplementation>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

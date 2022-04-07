@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 
 namespace RestASP_NETUdemy.Business
-{
-    public interface IPessoaBusiness
+{    public interface IPessoaBusiness
     {
         Pessoa Create(Pessoa pessoa);
         Pessoa FindByID(long id);

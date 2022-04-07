@@ -30,6 +30,20 @@ namespace RestASP_NETUdemy.Repository.Implementations
             return _context.Pessoas.SingleOrDefault(p => p.Id.Equals(id));
         }
 
+        public Pessoa Create(Pessoa pessoa)
+        {
+            try
+            {
+                _context.Add(pessoa);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return pessoa;
+        }
+
         public Pessoa Update(Pessoa pessoa)
         {
             if (!Exists(pessoa.Id)) return null;
@@ -52,20 +66,7 @@ namespace RestASP_NETUdemy.Repository.Implementations
             return pessoa;
         }
 
-        public Pessoa Create(Pessoa pessoa)
-        {
-            try
-            {
-                _context.Add(pessoa);
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return pessoa;
-        }
-
+        
         public void Delete(long id)
         {
             var result = _context.Pessoas.SingleOrDefault(p => p.Id.Equals(id));
