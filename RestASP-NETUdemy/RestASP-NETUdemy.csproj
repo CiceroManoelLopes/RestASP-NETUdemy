@@ -5,4 +5,27 @@
     <RootNamespace>RestASP_NETUdemy</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Model\NovaPasta1\**" />
+    <Compile Remove="Model\NovaPasta\**" />
+    <Content Remove="Model\NovaPasta1\**" />
+    <Content Remove="Model\NovaPasta\**" />
+    <EmbeddedResource Remove="Model\NovaPasta1\**" />
+    <EmbeddedResource Remove="Model\NovaPasta\**" />
+    <None Remove="Model\NovaPasta1\**" />
+    <None Remove="Model\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\PessoaController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\Script\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.4" />
+  </ItemGroup>
+
 </Project>
