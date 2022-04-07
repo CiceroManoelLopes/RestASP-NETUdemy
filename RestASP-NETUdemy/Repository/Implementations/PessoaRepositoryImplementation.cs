@@ -13,9 +13,9 @@ namespace RestASP_NETUdemy.Repository.Implementations
         //Retirada essa variavel, servia para usar antes de ter banco de dados
         //private volatile int count; 
 
-        private MySQLContext _context; //Declarar o Context para a classe
+        private MySQL _context; //Declarar o Context para a classe
 
-        public PessoaRepositoryImplementation(MySQLContext context) //Criar um Construtor que não existia antes de precisar da conexão do banco de dados, com parametrosde DBContext
+        public PessoaRepositoryImplementation(MySQL context) //Criar um Construtor que não existia antes de precisar da conexão do banco de dados, com parametrosde DBContext
         {
             _context = context; //Atribiu ao Context da Classe o Context que veio como Paramtro
         }
@@ -32,7 +32,7 @@ namespace RestASP_NETUdemy.Repository.Implementations
 
         public Pessoa Update(Pessoa pessoa)
         {
-            if (!Exists(pessoa.Id)) return new Pessoa();
+            if (!Exists(pessoa.Id)) return null;
 
             var result = _context.Pessoas.SingleOrDefault(p => p.Id.Equals(pessoa.Id));
 
