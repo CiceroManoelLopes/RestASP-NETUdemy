@@ -15,7 +15,7 @@ namespace RestASP_NETUdemy.Controllers
     public class BooksController : Controller
     {
         private readonly ILogger<BooksController> _logger;
-        private IBooksBusiness _booksBusiness;  //Declarou o serviço
+        private IBooksBusiness _booksBusiness; 
 
         public BooksController(ILogger<BooksController> logger, IBooksBusiness booksBusiness)
         {

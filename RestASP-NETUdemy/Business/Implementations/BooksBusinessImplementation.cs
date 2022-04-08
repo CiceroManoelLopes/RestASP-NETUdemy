@@ -9,9 +9,9 @@ namespace RestASP_NETUdemy.Business.Implementations
 {
     public class BooksBusinessImplementation : IBooksBusiness
     {
-        private readonly IBooksRepository _repository;
+        private readonly IRepository<Books> _repository;
 
-        public BooksBusinessImplementation(IBooksRepository repository) //Criar um Construtor que não existia antes de precisar da conexão do banco de dados, com parametrosde DBContext
+        public BooksBusinessImplementation(IRepository<Books> repository) //Criar um Construtor que não existia antes de precisar da conexão do banco de dados, com parametrosde DBContext
         {
             _repository = repository; //Atribiu ao Context da Classe o Context que veio como Paramtro
         }

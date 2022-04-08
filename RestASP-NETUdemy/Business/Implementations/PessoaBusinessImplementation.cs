@@ -14,9 +14,9 @@ namespace RestASP_NETUdemy.Business.Implementations
         //Retirada essa variavel, servia para usar antes de ter banco de dados
         //private volatile int count; 
 
-        private readonly IPessoaRepository _repository; 
+        private readonly IRepository<Pessoa> _repository; 
 
-        public PessoaBusinessImplementation(IPessoaRepository repository) //Criar um Construtor que não existia antes de precisar da conexão do banco de dados, com parametrosde DBContext
+        public PessoaBusinessImplementation(IRepository<Pessoa> repository) //Criar um Construtor que não existia antes de precisar da conexão do banco de dados, com parametrosde DBContext
         {
             _repository = repository; //Atribiu ao Context da Classe o Context que veio como Paramtro
         }

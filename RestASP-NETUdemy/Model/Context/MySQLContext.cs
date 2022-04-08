@@ -2,14 +2,14 @@
 
 namespace RestASP_NETUdemy.Model.Context
 {
-    public class MySQL : DbContext
+    public class MySQLContext : DbContext
     {
-        public MySQL()
+        public MySQLContext()
         {
 
         }
 
-        public MySQL(DbContextOptions<MySQL> options) : base(options) { }
+        public MySQLContext(DbContextOptions<MySQLContext> options) : base(options) { }
 
         public DbSet<Pessoa> Pessoas { get; set; }
         public DbSet<Books> Books { get; set; }

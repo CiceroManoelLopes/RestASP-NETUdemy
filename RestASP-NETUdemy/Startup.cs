@@ -1,22 +1,17 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using RestASP_NETUdemy.Model.Context;
 using RestASP_NETUdemy.Business;
 using RestASP_NETUdemy.Business.Implementations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using RestASP_NETUdemy.Repository;
-using RestASP_NETUdemy.Repository.Implementations;
 using Serilog;
+using RestASP_NETUdemy.Repository.Generic;
 
 namespace RestASP_NETUdemy
 {
@@ -49,7 +44,7 @@ namespace RestASP_NETUdemy
 
             //Primeiro Parametro String conexao pegando do JSON de configuração
             //Segundo Paranetro solicitado pelo meu .NET serverVersion, coloquei null e validar
-            services.AddDbContext<MySQL>(options => options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
+            services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 
             //Verificação para Migration
             if (Environment.IsDevelopment())
@@ -64,14 +59,13 @@ namespace RestASP_NETUdemy
 
             //06-04-2022 Cícero Lopes
             //Injeção de Dependencia
-            services.AddScoped<IPessoaBusiness, PessoaBusinessImplementation>(); 
-            services.AddScoped<IPessoaRepository, PessoaRepositoryImplementation>();
-
+            services.AddScoped<IPessoaBusiness, PessoaBusinessImplementation>();
+            //services.AddScoped<IPessoaRepository, PessoaRepositoryImplementation>();  //Foram trocadas as dependecias da classe books para classe e intercade generica
             services.AddScoped<IBooksBusiness, BooksBusinessImplementation>();
-            services.AddScoped<IBooksRepository, BooksRepositoryImplementation>();
-        }
+            //services.AddScoped<IBooksRepository, BooksRepositoryImplementation>(); //Foram trocadas as dependecias da classe books para classe e intercade generica
+            services.AddScoped(typeof(IRepository<>), typeof(GenericRepositoryImpl<>));        }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using RestASP_NETUdemy.Model.Base;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RestASP_NETUdemy.Model
 {
     [Table("books")]
-    public class Books
+    public class Books : BaseEntity
     {
-        [Column("Id")]
-        public long Id { get; set; }
-
         [Column("author")]
         public string Autor { get; set; }
 
