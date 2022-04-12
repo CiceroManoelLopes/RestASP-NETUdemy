@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RestASP_NETUdemy.Business;
 using RestASP_NETUdemy.Model;
@@ -11,6 +12,7 @@ namespace RestASP_NETUdemy.Controllers
 {
     [ApiVersion("1")]
     [ApiController]
+    [Authorize("Bearer")]
     [Route("api/[controller]/v{version:apiVersion}")] //Adicionado o termo "api/" após alterar o Launch //Adiciona a versão da API
     public class BooksController : Controller
     {

@@ -12,12 +12,21 @@ using System.Collections.Generic;
 using RestASP_NETUdemy.Repository;
 using Serilog;
 using RestASP_NETUdemy.Repository.Generic;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Rewrite;
+using RestASP_NETUdemy.Token.Service;
+using RestASP_NETUdemy.Repository.UserApi;
+using RestASP_NETUdemy.Configurations;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RestASP_NETUdemy
 {
     public class Startup
-    {
-
+    {      
         public IConfiguration Configuration { get; }
 
         //Migration e DataSet
@@ -37,7 +46,39 @@ namespace RestASP_NETUdemy
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {            
+        { 
+            var _tokenConfiguration = new TokenConfigurations();
+            new ConfigureFromConfigurationOptions<TokenConfigurations>(
+                Configuration.GetSection("Settings.TokenConfigurations")).Configure(_tokenConfiguration);
+            services.AddSingleton(_tokenConfiguration);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(option =>
+            {
+                option.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = _tokenConfiguration.Issuer,
+                    ValidAudience = _tokenConfiguration.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenConfiguration.Secret))
+                };
+            });
+
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy(
+                    "Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
+            });
+            
             services.AddControllers();
 
             var connection = Configuration["MySQLConnection:MySQLConnectionString"];
@@ -57,13 +98,36 @@ namespace RestASP_NETUdemy
             services.AddApiVersioning();
 
 
+            //Injeção do Swegger
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api Rest .Net Core 5 - Cícero Lopes" }); });
+
+            //Content Negociation
+            //Devolver XML ou JSON conforme requisição
+            services.AddMvc(Options =>
+            {
+                var mediaFormatterParaXML = Microsoft.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/xml");
+                var mediaFormatterParaJson = Microsoft.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+
+                Options.RespectBrowserAcceptHeader = true;
+                Options.FormatterMappings.SetMediaTypeMappingForFormat("json", mediaFormatterParaJson);
+                Options.FormatterMappings.SetMediaTypeMappingForFormat("xml", mediaFormatterParaXML);
+
+            })
+            .AddXmlSerializerFormatters();
+
+
             //06-04-2022 Cícero Lopes
             //Injeção de Dependencia
-            services.AddScoped<IPessoaBusiness, PessoaBusinessImplementation>();
-            //services.AddScoped<IPessoaRepository, PessoaRepositoryImplementation>();  //Foram trocadas as dependecias da classe books para classe e intercade generica
+            services.AddScoped<IPessoaBusiness, PessoaBusinessImplementation>();           
             services.AddScoped<IBooksBusiness, BooksBusinessImplementation>();
-            //services.AddScoped<IBooksRepository, BooksRepositoryImplementation>(); //Foram trocadas as dependecias da classe books para classe e intercade generica
-            services.AddScoped(typeof(IRepository<>), typeof(GenericRepositoryImpl<>));        }
+            services.AddScoped<ILoginBusiness, LoginBusinessImpl>();
+
+            services.AddTransient<ITokenService, TokenServiceImpl>();
+
+            services.AddScoped<IUserRepository, UserRepositoryImpl>();
+            services.AddScoped(typeof(IRepository<>), typeof(GenericRepositoryImpl<>));       
+        
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -76,6 +140,17 @@ namespace RestASP_NETUdemy
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json",
+                                  "REST API Core 5 - Cicero Lopes v1");
+            });
+
+            var option = new RewriteOptions();
+            option.AddRedirect("^$","swagger");
+            app.UseRewriter(option);
 
             app.UseAuthorization();
 

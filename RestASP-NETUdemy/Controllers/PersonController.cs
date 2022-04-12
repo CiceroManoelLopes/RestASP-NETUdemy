@@ -7,11 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RestASP_NETUdemy.Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RestASP_NETUdemy.Controllers
 {
     [ApiVersion("1")]
     [ApiController]
+    [Authorize("Bearer")]
     [Route("api/[controller]/v{version:apiVersion}")] //Adicionado o termo "api/" após alterar o Launch //Adiciona a versão da API
     public class PersonController : ControllerBase
     {
@@ -25,13 +27,19 @@ namespace RestASP_NETUdemy.Controllers
         }
 
         [HttpGet]
+        //[ProducesResponseType((200), Type = typeof(List<Pessoa>))] //Personalizar o Swagger
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(400)]
+        //[ProducesResponseType(201)]
         public IActionResult GetFindAll()
         {
             return Ok(_pessoaBusiness.FindAll());
         }
 
         [HttpGet("{id}")] //Passar o id que será localizado como parametro na URL e não no Body
-        //Os GETs podem ter o mesmo nome desde que para retirar ambiguidade colocar o Parametro "id" no  [HttpGet] com  [HttpGet("id")]
+                          //Os GETs podem ter o mesmo nome desde que para retirar ambiguidade colocar o Parametro "id" no  [HttpGet] com  [HttpGet("id")]
+        //[ProducesResponseType((200), Type = typeof(Pessoa))] //Personalizar o Swagger
         public IActionResult GetFindId(long id)
         {
             var pessoa = _pessoaBusiness.FindByID(id);
